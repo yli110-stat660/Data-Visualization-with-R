@@ -1,36 +1,36 @@
----
-title: "socviz chapter 7 section 3 Statebins"
-author: "Yaqiong Li"
-date: "Dec 8, 2018"
-output: pdf_document
----
-
-Instead of using *ggplot2* or *chloroplethr* packages to achieve chloropelth maps in the United States, *statebins* is another choice.
-
-Install the book's package from github.
-```{r}
+#' ---
+#' title: "socviz chapter 7 section 3 Statebins"
+#' author: "Yaqiong Li"
+#' date: "Dec 8, 2018"
+#' output: pdf_document
+#' ---
+#' 
+#' Instead of using *ggplot2* or *chloroplethr* packages to achieve chloropelth maps in the United States, *statebins* is another choice.
+#' 
+#' Install the book's package from github.
+## ------------------------------------------------------------------------
 # devtools::install_github("kjhealy/socviz")
-```
 
-Several arguements:
-* state_data refers to the data frame
-* state_col refers to a vector of state names
-* value_col refers to the value to be shown
-* statebins_continuous() refers to continuous variables
-
-```{r message=FALSE}
+#' 
+#' Several arguements:
+#' * state_data refers to the data frame
+#' * state_col refers to a vector of state names
+#' * value_col refers to the value to be shown
+#' * statebins_continuous() refers to continuous variables
+#' 
+## ----message=FALSE-------------------------------------------------------
 library(statebins)
 library(socviz) # this package has election as a data frame
 library(tidyverse)
 
 head(election)
-```
 
-```{r}
+#' 
+## ------------------------------------------------------------------------
 election %>% select(state, total_vote, r_points, pct_trump, party, census) %>% sample_n(5)
-```
 
-```{r}
+#' 
+## ------------------------------------------------------------------------
 statebins_continuous(state_data = election, 
                      state_col = "state", 
                      text_color = "white", 
@@ -38,9 +38,9 @@ statebins_continuous(state_data = election,
                      brewer_pal = "Reds", 
                      font_size = 3, 
                      legend_title = "Percent Trump")
-```
 
-```{r}
+#' 
+## ------------------------------------------------------------------------
 statebins_continuous(state_data = subset(election, st %nin% "DC"), 
                      state_col = "state",
                      text_color = "black",
@@ -48,17 +48,17 @@ statebins_continuous(state_data = subset(election, st %nin% "DC"),
                      brewer_pal = "Blues",
                      font_size = 3,
                      legend_title = "Percent Clinton")
-```
 
-For categorical data, use statebins_manual(). Here a variable called _color_ is created to represent the party.
-```{r}
+#' 
+#' For categorical data, use statebins_manual(). Here a variable called _color_ is created to represent the party.
+## ------------------------------------------------------------------------
 election <- election %>% mutate(color = recode(party, 
                                                Republican = "red",
                                                Democrat = "blue"))
 head(election)
-```
 
-```{r}
+#' 
+## ------------------------------------------------------------------------
 statebins_manual(state_data = election,
                  state_col = "st",
                  color_col = "color",
@@ -67,10 +67,10 @@ statebins_manual(state_data = election,
                  legend_title = "Winner",
                  labels = c("Trump", "Clinton"),
                  legend_position = "right")
-```
 
-Alternatively, use statebins() cut the data by the _breaks_ argument.
-```{r}
+#' 
+#' Alternatively, use statebins() cut the data by the _breaks_ argument.
+## ------------------------------------------------------------------------
 statebins(state_data = election,
           state_col = "state",
           value_col = "pct_trump",
@@ -80,5 +80,5 @@ statebins(state_data = election,
           brewer_pal = "Reds",
           font_size = 3,
           legend_title = "Percent Trump")
-```
 
+#' 
