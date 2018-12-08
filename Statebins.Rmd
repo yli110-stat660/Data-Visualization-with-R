@@ -1,6 +1,7 @@
 ---
 title: "socviz chapter 7 section 3 Statebins"
-output: html_notebook
+author: "Yaqiong Li"
+date: "Dec 8, 2018"
 ---
 
 Instead of using *ggplot2* or *chloroplethr* packages to achieve chloropelth maps in the United States, *statebins* is another choice.
