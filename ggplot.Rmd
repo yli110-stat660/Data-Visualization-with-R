@@ -1,0 +1,143 @@
+---
+title: "r4ds chapter 3 ggplot"
+author: "Yaqiong Li"
+date: "Dec 10, 2018"
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+library(ggplot2)
+
+head(mpg)
+```
+
+ggplot() creates a cooridnate systhem that you can add layers on.
+```{r}
+mpg %>% ggplot(aes(x=displ, y=hwy)) + geom_point()
+```
+
+```{r}
+ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+# Ex 3.2.4
+```{r}
+ggplot(data = mpg)
+```
+
+```{r}
+dim(mpg)
+```
+
+```{r}
+mpg %>% ggplot(aes(x = cyl, y = hwy)) + geom_point()
+```
+
+```{r}
+mpg %>% ggplot(aes(x = class, y = drv)) + geom_point()
+```
+
+# 3.3
+```{r}
+mpg %>% ggplot(aes(x=displ, y=hwy)) + geom_point(aes(col = class))
+```
+
+codes from book
+```{r}
+ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy, col = class))
+```
+
+Notes: to map an aesthetic to a variable, associate the name of the aesthetic to the name of the variable inside aes(). ggplot2 will automatically assign a unique level of aesthetic (color here) to each unique value of the variable, a process known as *scaling*.
+
+Mapping an unordered varialbe (class) to an ordered aesthetic (size) is not a good idea, thus we got a warning for doing this.
+```{r}
+mpg %>% ggplot(aes(x = displ, y = hwy)) + geom_point(aes (size = class))
+```
+
+aes _alpha_ controls the transparency
+aes _shape_ controls the shape
+```{r}
+mpg %>% ggplot() + geom_point(aes(x = displ, y = hwy, alpha = class))
+```
+
+```{r}
+mpg %>% ggplot() + geom_point(aes(x = displ, y = hwy, shape = class))
+```
+
+If you want to manually set the aesthetic properties that do not convey information from the data set, it goes _outside_ of aes()
+```{r}
+mpg %>% ggplot() + geom_point(aes(x = displ, y = hwy), col = "red")
+```
+
+other manual aesthetic settings include
+* color
+* size (mm)
+* the [shape](https://r4ds.had.co.nz/data-visualisation.html#fig:shapes) of points
+
+# Ex 3.3.1
+```{r}
+glimpse(mpg)
+```
+
+A reference about [stroke](https://ggplot2.tidyverse.org/reference/geom_point.html)
+```{r}
+# For shapes that have a border, you can color inside and outside separately. Use the stroke aesthetic to modify the width of the border
+
+mpg %>% ggplot(aes(x = displ, y = hwy)) + geom_point(shape = 21, color = "red", fill = "blue", size = 5, stroke = 2)
+```
+
+```{r}
+mpg %>% ggplot(aes(x = displ, y = hwy, col = displ < 5)) + geom_point()
+```
+
+# 3.4 Common problems
+* If the left hand of the console is a "+", it means that R doesn't think that you have completed an expression. Press *ESCAPE* to start over.
+
+# 3.5 Facets
+Facet can be used to split the plot by categorical variable.
+
+Facet by single variable.
+```{r}
+mpg %>% ggplot(aes(x = displ, y = hwy)) + geom_point() + facet_wrap(~ class, nrow = 2)
+```
+
+Facet by combination of variables.
+```{r}
+mpg %>% ggplot(aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_grid(drv ~ cyl)
+```
+
+```{r}
+mpg %>% ggplot(aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_grid( .~ cyl) # . means not into r*c
+```
+
+# Ex 3.5.1
+```{r}
+mpg %>% ggplot(aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_grid(drv ~.)
+```
+
+# 3.6 Geometric objects
+```{r}
+g <- mpg %>% ggplot(aes(x = displ, y = hwy))
+g + geom_point()
+```
+
+```{r}
+g + geom_smooth()
+```
+
+```{r}
+g + geom_smooth(aes(linetype = drv))
+```
+```{r}
+g + geom_point(aes(col = drv)) + geom_smooth(aes(linetype = drv))
+```
+
